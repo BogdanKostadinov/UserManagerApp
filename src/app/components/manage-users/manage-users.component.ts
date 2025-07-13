@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -6,6 +6,8 @@ import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
 import { EditUserDialogComponent } from '../edit-user-dialog/edit-user-dialog.component';
+import { ConfirmationDialogComponent } from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { Subject, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-manage-users',
@@ -13,7 +15,7 @@ import { EditUserDialogComponent } from '../edit-user-dialog/edit-user-dialog.co
   styleUrl: './manage-users.component.scss',
   standalone: false,
 })
-export class ManageUsersComponent implements OnInit {
+export class ManageUsersComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     'name',
     'role',
@@ -23,12 +25,13 @@ export class ManageUsersComponent implements OnInit {
     'actions',
   ];
   dataSource = new MatTableDataSource<User>();
-  loading = false;
 
   // Stats properties
   totalUsers = 0;
   activeUsers = 0;
   inactiveUsers = 0;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private userService: UserService,
@@ -40,32 +43,27 @@ export class ManageUsersComponent implements OnInit {
     this.loadUsers();
   }
 
-  /**
-   * Load all users from the service
-   */
-  loadUsers(): void {
-    this.loading = true;
-    this.userService.getUsers().subscribe({
-      next: (users) => {
-        this.dataSource.data = users;
-        this.updateStats(users);
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error loading users:', error);
-        this.snackBar.open('Error loading users', 'Close', { duration: 3000 });
-        this.loading = false;
-      },
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  /**
-   * Update statistics based on users data
-   */
-  private updateStats(users: User[]): void {
-    this.totalUsers = users.length;
-    this.activeUsers = users.filter(user => user.isActive).length;
-    this.inactiveUsers = users.filter(user => !user.isActive).length;
+  loadUsers(): void {
+    this.userService
+      .getUsers$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (users) => {
+          this.dataSource.data = users;
+          this.updateStats(users);
+        },
+        error: (error) => {
+          console.error('Error loading users:', error);
+          this.snackBar.open('Error loading users', 'Close', {
+            duration: 3000,
+          });
+        },
+      });
   }
 
   /**
@@ -76,13 +74,10 @@ export class ManageUsersComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  /**
-   * Toggle user active status
-   */
   toggleUserStatus(user: User): void {
     if (!user.id) return;
 
-    this.userService.toggleUserStatus(user.id, user.isActive).subscribe({
+    this.userService.toggleUserStatus$(user.id, user.isActive).subscribe({
       next: () => {
         // Reload users to get updated data
         this.loadUsers();
@@ -99,34 +94,43 @@ export class ManageUsersComponent implements OnInit {
     });
   }
 
-  /**
-   * Delete user
-   */
   deleteUser(user: User): void {
     if (!user.id) return;
 
-    if (confirm(`Are you sure you want to delete ${user.name}?`)) {
-      this.userService.deleteUser(user.id).subscribe({
-        next: () => {
-          // Reload users to get updated data
-          this.loadUsers();
-          this.snackBar.open('User deleted successfully', 'Close', {
-            duration: 3000,
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      height: 'auto',
+      data: {
+        title: 'Delete User',
+        description: `Are you sure you want to delete ${user.name}? This action cannot be undone.`,
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.userService
+          .deleteUser$(user.id!)
+          .pipe(take(1))
+          .subscribe({
+            next: () => {
+              // Reload users to get updated data
+              this.loadUsers();
+              this.snackBar.open('User deleted successfully', 'Close', {
+                duration: 3000,
+              });
+            },
+            error: (error) => {
+              console.error('Error deleting user:', error);
+              this.snackBar.open('Error deleting user', 'Close', {
+                duration: 3000,
+              });
+            },
           });
-        },
-        error: (error) => {
-          console.error('Error deleting user:', error);
-          this.snackBar.open('Error deleting user', 'Close', {
-            duration: 3000,
-          });
-        },
-      });
-    }
+      }
+    });
   }
 
-  /**
-   * Edit user
-   */
   editUser(user: User): void {
     const dialogRef = this.dialog.open(EditUserDialogComponent, {
       width: '500px',
@@ -136,7 +140,7 @@ export class ManageUsersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result && user.id) {
-        this.userService.updateUser(user.id, result).subscribe({
+        this.userService.updateUser$(user.id, result).subscribe({
           next: () => {
             // Reload users to get updated data
             this.loadUsers();
@@ -155,9 +159,6 @@ export class ManageUsersComponent implements OnInit {
     });
   }
 
-  /**
-   * Add new user
-   */
   addUser(): void {
     const dialogRef = this.dialog.open(AddUserDialogComponent, {
       width: '500px',
@@ -166,7 +167,7 @@ export class ManageUsersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.userService.addUser(result).subscribe({
+        this.userService.addUser$(result).subscribe({
           next: (newUser) => {
             // Reload users to include the new user
             this.loadUsers();
@@ -185,19 +186,6 @@ export class ManageUsersComponent implements OnInit {
     });
   }
 
-  /**
-   * Export users data
-   */
-  exportUsers(): void {
-    // TODO: Implement export functionality
-    this.snackBar.open('Export functionality coming soon!', 'Close', {
-      duration: 3000,
-    });
-  }
-
-  /**
-   * Get role badge color
-   */
   getRoleBadgeColor(role: string): string {
     switch (role.toLowerCase()) {
       case 'admin':
@@ -207,5 +195,14 @@ export class ManageUsersComponent implements OnInit {
       default:
         return 'primary';
     }
+  }
+
+  /**
+   * Update statistics based on users data
+   */
+  private updateStats(users: User[]): void {
+    this.totalUsers = users.length;
+    this.activeUsers = users.filter((user) => user.isActive).length;
+    this.inactiveUsers = users.filter((user) => !user.isActive).length;
   }
 }

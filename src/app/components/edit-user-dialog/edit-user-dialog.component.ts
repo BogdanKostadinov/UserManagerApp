@@ -1,12 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  AsyncValidatorFn,
-  AbstractControl,
-  ValidationErrors,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User, UserRole } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
@@ -44,7 +37,7 @@ export class EditUserDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe((users) => {
+    this.userService.getUsers$().subscribe((users) => {
       this.allNames = users
         .filter((u) => u.id !== this.data.user.id)
         .map((u) => u.name.toLowerCase());

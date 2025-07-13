@@ -23,27 +23,18 @@ export class UserService {
     this.usersCollection = collection(this.firestore, 'users');
   }
 
-  /**
-   * Get all users
-   */
-  getUsers(): Observable<User[]> {
+  getUsers$(): Observable<User[]> {
     return collectionData(this.usersCollection, {
       idField: 'id',
     }) as Observable<User[]>;
   }
 
-  /**
-   * Get user by ID
-   */
-  getUserById(id: string): Observable<User | undefined> {
+  getUserById$(id: string): Observable<User | undefined> {
     const userDoc = doc(this.firestore, `users/${id}`);
     return docData(userDoc, { idField: 'id' }) as Observable<User | undefined>;
   }
 
-  /**
-   * Add new user
-   */
-  addUser(
+  addUser$(
     user: Omit<User, 'id' | 'createdAt' | 'updatedAt'>,
   ): Observable<User> {
     const newUser = {
@@ -65,10 +56,7 @@ export class UserService {
     );
   }
 
-  /**
-   * Update existing user
-   */
-  updateUser(id: string, userData: Partial<User>): Observable<void> {
+  updateUser$(id: string, userData: Partial<User>): Observable<void> {
     const userDoc = doc(this.firestore, `users/${id}`);
     const updateData = {
       ...userData,
@@ -77,18 +65,12 @@ export class UserService {
     return from(updateDoc(userDoc, updateData));
   }
 
-  /**
-   * Delete user
-   */
-  deleteUser(id: string): Observable<void> {
+  deleteUser$(id: string): Observable<void> {
     const userDoc = doc(this.firestore, `users/${id}`);
     return from(deleteDoc(userDoc));
   }
 
-  /**
-   * Toggle user active status
-   */
-  toggleUserStatus(id: string, currentStatus: boolean): Observable<void> {
+  toggleUserStatus$(id: string, currentStatus: boolean): Observable<void> {
     const userDoc = doc(this.firestore, `users/${id}`);
     return from(
       updateDoc(userDoc, {

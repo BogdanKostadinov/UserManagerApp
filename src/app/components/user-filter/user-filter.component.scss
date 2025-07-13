@@ -14,11 +14,11 @@
 .search-field {
   flex: 1;
   min-width: 300px;
-  
+
   .mat-mdc-form-field-outline {
     border-radius: 12px !important;
   }
-  
+
   .search-icon {
     color: var(--primary-color);
   }
@@ -30,7 +30,7 @@
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .search-field {
     min-width: auto;
   }

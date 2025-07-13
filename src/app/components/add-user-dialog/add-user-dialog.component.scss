@@ -13,7 +13,7 @@
     var(--primary-light)
   );
   color: white;
-  padding: 24px;
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -25,7 +25,7 @@
   gap: 12px;
 
   .header-icon {
-    font-size: 28px !important;
+    font-size: 28px;
     width: 28px;
     height: 28px;
   }
@@ -47,7 +47,7 @@
 }
 
 .dialog-content {
-  padding: 32px 24px !important;
+  padding: 32px 24px;
   background: var(--surface-color);
   max-height: 70vh;
   overflow-y: auto;
@@ -65,7 +65,7 @@
     width: 100%;
 
     .mat-mdc-form-field-outline {
-      border-radius: 12px !important;
+      border-radius: 12px;
     }
 
     .mat-mdc-form-field-prefix {
@@ -74,7 +74,7 @@
     }
 
     .mdc-text-field--focused .mat-mdc-form-field-outline-thick {
-      border-color: var(--primary-color) !important;
+      border-color: var(--primary-color);
     }
   }
 }
@@ -127,7 +127,7 @@
   gap: 16px;
 
   .toggle-icon {
-    font-size: 24px !important;
+    font-size: 24px;
     width: 24px;
     height: 24px;
     color: var(--primary-color);
@@ -151,20 +151,20 @@
 
 .status-toggle {
   .mdc-switch__track {
-    background-color: #e2e8f0 !important;
+    background-color: #e2e8f0;
   }
 
   &.mat-mdc-slide-toggle-checked .mdc-switch__track {
-    background-color: var(--primary-color) !important;
+    background-color: var(--primary-color);
   }
 
   .mdc-switch__thumb {
-    background-color: white !important;
+    background-color: white;
   }
 }
 
 .dialog-actions {
-  padding: 24px !important;
+  padding: 24px;
   margin: 0;
   background: #f8fafc;
   border-top: 1px solid #e2e8f0;
@@ -174,15 +174,15 @@
 }
 
 .cancel-btn {
-  color: var(--text-secondary) !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 8px !important;
-  padding: 8px 20px !important;
-  font-weight: 500 !important;
+  color: var(--text-secondary);
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-weight: 500;
 
   &:hover {
-    background-color: #f1f5f9 !important;
-    border-color: #cbd5e1 !important;
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
   }
 
   mat-icon {
@@ -198,23 +198,23 @@
     135deg,
     var(--primary-color),
     var(--primary-light)
-  ) !important;
-  color: white !important;
-  border-radius: 8px !important;
-  padding: 8px 20px !important;
-  font-weight: 600 !important;
-  box-shadow: var(--shadow-md) !important;
-  transition: all 0.3s ease !important;
+  );
+  color: white;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: var(--shadow-lg) !important;
+    box-shadow: var(--shadow-lg);
   }
 
   &:disabled {
-    background: #e2e8f0 !important;
-    color: #94a3b8 !important;
-    transform: none !important;
-    box-shadow: none !important;
+    background: #e2e8f0;
+    color: #94a3b8;
+    transform: none;
+    box-shadow: none;
   }
 
   mat-icon {
@@ -241,7 +241,7 @@
   }
 
   .dialog-content {
-    padding: 24px 20px !important;
+    padding: 24px 20px;
   }
 
   .user-form {
@@ -256,7 +256,7 @@
   }
 
   .dialog-actions {
-    padding: 20px !important;
+    padding: 20px;
     flex-direction: column;
     gap: 8px;
 

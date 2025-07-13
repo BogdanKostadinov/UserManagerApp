@@ -104,21 +104,27 @@
             >
               <mat-icon>more_vert</mat-icon>
             </button>
-            
+
             <mat-menu #actionMenu="matMenu" class="user-actions-menu">
               <button mat-menu-item (click)="onEditUser(user)">
                 <mat-icon>edit</mat-icon>
                 <span>Edit User</span>
               </button>
-              
+
               <button mat-menu-item (click)="onToggleUserStatus(user)">
-                <mat-icon>{{ user.isActive ? "block" : "check_circle" }}</mat-icon>
+                <mat-icon>{{
+                  user.isActive ? "block" : "check_circle"
+                }}</mat-icon>
                 <span>{{ user.isActive ? "Deactivate" : "Activate" }}</span>
               </button>
-              
+
               <mat-divider></mat-divider>
-              
-              <button mat-menu-item (click)="onDeleteUser(user)" class="delete-action">
+
+              <button
+                mat-menu-item
+                (click)="onDeleteUser(user)"
+                class="delete-action"
+              >
                 <mat-icon>delete</mat-icon>
                 <span>Delete User</span>
               </button>

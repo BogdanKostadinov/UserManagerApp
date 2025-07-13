@@ -2,7 +2,7 @@
 <mat-toolbar class="header-toolbar sticky-header">
   <div class="header-content">
     <div class="header-text">
-      <h1 class="page-title">User Management</h1>
+      <h1 class="page-title">User management</h1>
     </div>
     <button
       mat-raised-button
@@ -11,7 +11,7 @@
       class="add-user-btn"
     >
       <mat-icon>add</mat-icon>
-      Add New User
+      Add user
     </button>
   </div>
 </mat-toolbar>
@@ -21,24 +21,21 @@
   <app-user-stats
     [totalUsers]="totalUsers"
     [activeUsers]="activeUsers"
-    [inactiveUsers]="inactiveUsers">
+    [inactiveUsers]="inactiveUsers"
+  >
   </app-user-stats>
 
   <!-- Filter Section -->
-  <app-user-filter
-    (searchChanged)="applyFilter($event)">
-  </app-user-filter>
+  <app-user-filter (searchChanged)="applyFilter($event)"> </app-user-filter>
 
   <!-- Table Section -->
   <app-users-table
     [dataSource]="dataSource"
-    [loading]="loading"
     [displayedColumns]="displayedColumns"
     (editUser)="editUser($event)"
     (deleteUser)="deleteUser($event)"
     (toggleUserStatus)="toggleUserStatus($event)"
     (addUser)="addUser()"
-    (refresh)="loadUsers()"
-    (export)="exportUsers()">
+  >
   </app-users-table>
 </div>

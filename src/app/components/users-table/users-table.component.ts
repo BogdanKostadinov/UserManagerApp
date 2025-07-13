@@ -1,4 +1,12 @@
-import { Component, Input, Output, EventEmitter, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+  OnInit,
+  AfterViewInit,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -12,15 +20,12 @@ import { User } from '../../models/user.model';
 })
 export class UsersTableComponent implements OnInit, AfterViewInit {
   @Input() dataSource!: MatTableDataSource<User>;
-  @Input() loading = false;
   @Input() displayedColumns: string[] = [];
 
   @Output() editUser = new EventEmitter<User>();
   @Output() deleteUser = new EventEmitter<User>();
   @Output() toggleUserStatus = new EventEmitter<User>();
   @Output() addUser = new EventEmitter<void>();
-  @Output() refresh = new EventEmitter<void>();
-  @Output() export = new EventEmitter<void>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -50,14 +55,6 @@ export class UsersTableComponent implements OnInit, AfterViewInit {
 
   onAddUser(): void {
     this.addUser.emit();
-  }
-
-  onRefresh(): void {
-    this.refresh.emit();
-  }
-
-  onExport(): void {
-    this.export.emit();
   }
 
   /**

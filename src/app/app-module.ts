@@ -9,6 +9,7 @@ import { EditUserDialogComponent } from './components/edit-user-dialog/edit-user
 import { UserStatsComponent } from './components/user-stats/user-stats.component';
 import { UserFilterComponent } from './components/user-filter/user-filter.component';
 import { UsersTableComponent } from './components/users-table/users-table.component';
+import { ConfirmationDialogComponent } from './shared/components/confirmation-dialog/confirmation-dialog.component';
 import { FirestoreDatePipe } from './shared/pipes/firestore-date.pipe';
 
 // Firebase imports
@@ -26,6 +27,7 @@ import { MaterialModule } from './shared/modules/material/material-module';
     UserStatsComponent,
     UserFilterComponent,
     UsersTableComponent,
+    ConfirmationDialogComponent,
     FirestoreDatePipe,
   ],
   imports: [

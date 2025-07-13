@@ -14,14 +14,18 @@
       <div class="form-group">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>User name</mat-label>
-          <input 
-            matInput 
-            formControlName="name" 
+          <input
+            matInput
+            formControlName="name"
             placeholder="Enter a username"
             autocomplete="name"
           />
           <mat-icon matPrefix>person</mat-icon>
-          <mat-error *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">
+          <mat-error
+            *ngIf="
+              userForm.get('name')?.invalid && userForm.get('name')?.touched
+            "
+          >
             {{ getErrorMessage("name") }}
           </mat-error>
         </mat-form-field>
@@ -38,7 +42,11 @@
             </mat-option>
           </mat-select>
           <mat-icon matPrefix>badge</mat-icon>
-          <mat-error *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched">
+          <mat-error
+            *ngIf="
+              userForm.get('role')?.invalid && userForm.get('role')?.touched
+            "
+          >
             {{ getErrorMessage("role") }}
           </mat-error>
         </mat-form-field>
@@ -53,7 +61,11 @@
               <p>Control whether this user account is active</p>
             </div>
           </div>
-          <mat-slide-toggle formControlName="isActive" color="primary" class="status-toggle">
+          <mat-slide-toggle
+            formControlName="isActive"
+            color="primary"
+            class="status-toggle"
+          >
             Active User
           </mat-slide-toggle>
         </div>

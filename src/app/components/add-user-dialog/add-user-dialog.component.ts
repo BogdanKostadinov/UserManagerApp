@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User, UserRole } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { duplicateNameValidator } from '../../shared/validators/custom-validators';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-add-user-dialog',
@@ -37,9 +38,12 @@ export class AddUserDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe((users) => {
-      this.allNames = users.map((u) => u.name.toLowerCase());
-    });
+    this.userService
+      .getUsers$()
+      .pipe(take(1))
+      .subscribe((users) => {
+        this.allNames = users.map((u) => u.name.toLowerCase());
+      });
   }
 
   onCancel(): void {
