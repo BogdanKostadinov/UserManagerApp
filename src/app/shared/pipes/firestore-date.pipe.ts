@@ -3,14 +3,14 @@ import { Timestamp } from '@angular/fire/firestore';
 
 @Pipe({
   name: 'firestoreDate',
-  standalone: false
+  standalone: false,
 })
 export class FirestoreDatePipe implements PipeTransform {
   transform(value: Date | Timestamp | any, format: string = 'short'): string {
     if (!value) return '';
-    
+
     let date: Date;
-    
+
     // Check if it's a Firestore Timestamp
     if (value && typeof value.toDate === 'function') {
       date = value.toDate();
@@ -21,7 +21,7 @@ export class FirestoreDatePipe implements PipeTransform {
     } else {
       return '';
     }
-    
+
     // Format the date based on the format parameter
     switch (format) {
       case 'short':

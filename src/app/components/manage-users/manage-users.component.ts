@@ -85,11 +85,9 @@ export class ManageUsersComponent implements OnInit {
       next: () => {
         // Reload users to get updated data
         this.loadUsers();
-        this.snackBar.open(
-          `User status updated successfully`,
-          'Close',
-          { duration: 3000 },
-        );
+        this.snackBar.open(`User status updated successfully`, 'Close', {
+          duration: 3000,
+        });
       },
       error: (error) => {
         console.error('Error updating user status:', error);
@@ -132,10 +130,10 @@ export class ManageUsersComponent implements OnInit {
     const dialogRef = this.dialog.open(EditUserDialogComponent, {
       width: '500px',
       disableClose: true,
-      data: { user: user }
+      data: { user: user },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result && user.id) {
         this.userService.updateUser(user.id, result).subscribe({
           next: () => {
@@ -150,7 +148,7 @@ export class ManageUsersComponent implements OnInit {
             this.snackBar.open('Error updating user', 'Close', {
               duration: 3000,
             });
-          }
+          },
         });
       }
     });
@@ -162,10 +160,10 @@ export class ManageUsersComponent implements OnInit {
   addUser(): void {
     const dialogRef = this.dialog.open(AddUserDialogComponent, {
       width: '500px',
-      disableClose: true
+      disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.userService.addUser(result).subscribe({
           next: (newUser) => {
@@ -180,7 +178,7 @@ export class ManageUsersComponent implements OnInit {
             this.snackBar.open('Error adding user', 'Close', {
               duration: 3000,
             });
-          }
+          },
         });
       }
     });

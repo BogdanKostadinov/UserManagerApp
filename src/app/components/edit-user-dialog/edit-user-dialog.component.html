@@ -4,9 +4,11 @@
   <form [formGroup]="userForm" class="user-form">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Name</mat-label>
-      <input matInput formControlName="name" placeholder="Enter user name">
-      <mat-error *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">
-        {{ getErrorMessage('name') }}
+      <input matInput formControlName="name" placeholder="Enter user name" />
+      <mat-error
+        *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched"
+      >
+        {{ getErrorMessage("name") }}
       </mat-error>
     </mat-form-field>
 
@@ -17,8 +19,10 @@
           {{ role }}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched">
-        {{ getErrorMessage('role') }}
+      <mat-error
+        *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched"
+      >
+        {{ getErrorMessage("role") }}
       </mat-error>
     </mat-form-field>
 
@@ -30,7 +34,12 @@
 
 <mat-dialog-actions [align]="'end'">
   <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!userForm.valid">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="!userForm.valid"
+  >
     Update User
   </button>
 </mat-dialog-actions>

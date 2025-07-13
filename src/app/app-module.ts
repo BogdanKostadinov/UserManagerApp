@@ -15,7 +15,13 @@ import { environment } from '../environments/environment';
 import { MaterialModule } from './shared/modules/material/material-module';
 
 @NgModule({
-  declarations: [App, ManageUsersComponent, AddUserDialogComponent, EditUserDialogComponent, FirestoreDatePipe],
+  declarations: [
+    App,
+    ManageUsersComponent,
+    AddUserDialogComponent,
+    EditUserDialogComponent,
+    FirestoreDatePipe,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

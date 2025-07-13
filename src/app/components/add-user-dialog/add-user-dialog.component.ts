@@ -1,7 +1,9 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
+import { duplicateNameValidator } from '../../shared/validators/custom-validators';
 
 @Component({
   selector: 'app-add-user-dialog',
@@ -9,19 +11,34 @@ import { User } from '../../models/user.model';
   styleUrl: './add-user-dialog.component.scss',
   standalone: false,
 })
-export class AddUserDialogComponent {
+export class AddUserDialogComponent implements OnInit {
   userForm: FormGroup;
   roles = ['Admin', 'Moderator', 'User'];
+  allNames: string[] = [];
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddUserDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private userService: UserService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     this.userForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
+      name: [
+        '',
+        {
+          validators: [Validators.required, Validators.minLength(2)],
+          asyncValidators: [duplicateNameValidator(() => this.allNames)],
+          updateOn: 'blur',
+        },
+      ],
       role: ['', Validators.required],
-      isActive: [true]
+      isActive: [true],
+    });
+  }
+
+  ngOnInit(): void {
+    this.userService.getUsers().subscribe((users) => {
+      this.allNames = users.map((u) => u.name.toLowerCase());
     });
   }
 
@@ -34,7 +51,7 @@ export class AddUserDialogComponent {
       const userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'> = {
         name: this.userForm.value.name,
         role: this.userForm.value.role,
-        isActive: this.userForm.value.isActive
+        isActive: this.userForm.value.isActive,
       };
       this.dialogRef.close(userData);
     }
@@ -47,6 +64,9 @@ export class AddUserDialogComponent {
     }
     if (control?.hasError('minlength')) {
       return `${field.charAt(0).toUpperCase() + field.slice(1)} must be at least 2 characters`;
+    }
+    if (control?.hasError('duplicateName')) {
+      return 'This name already exists.';
     }
     return '';
   }
