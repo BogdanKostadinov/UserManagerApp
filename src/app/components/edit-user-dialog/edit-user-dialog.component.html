@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Edit User</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="userForm" class="user-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter user name">
+      <mat-error *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">
+        {{ getErrorMessage('name') }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        <mat-option *ngFor="let role of roles" [value]="role">
+          {{ role }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched">
+        {{ getErrorMessage('role') }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-slide-toggle formControlName="isActive" color="primary">
+      Active User
+    </mat-slide-toggle>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions [align]="'end'">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!userForm.valid">
+    Update User
+  </button>
+</mat-dialog-actions>

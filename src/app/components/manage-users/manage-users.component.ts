@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
+import { EditUserDialogComponent } from '../edit-user-dialog/edit-user-dialog.component';
 
 @Component({
   selector: 'app-manage-users',
@@ -125,12 +126,33 @@ export class ManageUsersComponent implements OnInit {
   }
 
   /**
-   * Edit user (placeholder for future implementation)
+   * Edit user
    */
   editUser(user: User): void {
-    // TODO: Implement edit user dialog
-    this.snackBar.open('Edit functionality coming soon!', 'Close', {
-      duration: 3000,
+    const dialogRef = this.dialog.open(EditUserDialogComponent, {
+      width: '500px',
+      disableClose: true,
+      data: { user: user }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && user.id) {
+        this.userService.updateUser(user.id, result).subscribe({
+          next: () => {
+            // Reload users to get updated data
+            this.loadUsers();
+            this.snackBar.open('User updated successfully!', 'Close', {
+              duration: 3000,
+            });
+          },
+          error: (error) => {
+            console.error('Error updating user:', error);
+            this.snackBar.open('Error updating user', 'Close', {
+              duration: 3000,
+            });
+          }
+        });
+      }
     });
   }
 
