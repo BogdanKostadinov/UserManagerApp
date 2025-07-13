@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
+import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
 
 @Component({
   selector: 'app-manage-users',
@@ -79,23 +80,15 @@ export class ManageUsersComponent implements OnInit {
   toggleUserStatus(user: User): void {
     if (!user.id) return;
 
-    this.userService.toggleUserStatus(user.id).subscribe({
-      next: (updatedUser) => {
-        if (updatedUser) {
-          const index = this.dataSource.data.findIndex((u) => u.id === user.id);
-          if (index !== -1) {
-            const data = [...this.dataSource.data];
-            data[index] = updatedUser;
-            this.dataSource.data = data;
-          }
-          this.snackBar.open(
-            `User ${
-              updatedUser.isActive ? 'activated' : 'deactivated'
-            } successfully`,
-            'Close',
-            { duration: 3000 },
-          );
-        }
+    this.userService.toggleUserStatus(user.id, user.isActive).subscribe({
+      next: () => {
+        // Reload users to get updated data
+        this.loadUsers();
+        this.snackBar.open(
+          `User status updated successfully`,
+          'Close',
+          { duration: 3000 },
+        );
       },
       error: (error) => {
         console.error('Error updating user status:', error);
@@ -114,15 +107,12 @@ export class ManageUsersComponent implements OnInit {
 
     if (confirm(`Are you sure you want to delete ${user.name}?`)) {
       this.userService.deleteUser(user.id).subscribe({
-        next: (success) => {
-          if (success) {
-            this.dataSource.data = this.dataSource.data.filter(
-              (u) => u.id !== user.id,
-            );
-            this.snackBar.open('User deleted successfully', 'Close', {
-              duration: 3000,
-            });
-          }
+        next: () => {
+          // Reload users to get updated data
+          this.loadUsers();
+          this.snackBar.open('User deleted successfully', 'Close', {
+            duration: 3000,
+          });
         },
         error: (error) => {
           console.error('Error deleting user:', error);
@@ -145,12 +135,32 @@ export class ManageUsersComponent implements OnInit {
   }
 
   /**
-   * Add new user (placeholder for future implementation)
+   * Add new user
    */
   addUser(): void {
-    // TODO: Implement add user dialog
-    this.snackBar.open('Add user functionality coming soon!', 'Close', {
-      duration: 3000,
+    const dialogRef = this.dialog.open(AddUserDialogComponent, {
+      width: '500px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.userService.addUser(result).subscribe({
+          next: (newUser) => {
+            // Reload users to include the new user
+            this.loadUsers();
+            this.snackBar.open('User added successfully!', 'Close', {
+              duration: 3000,
+            });
+          },
+          error: (error) => {
+            console.error('Error adding user:', error);
+            this.snackBar.open('Error adding user', 'Close', {
+              duration: 3000,
+            });
+          }
+        });
+      }
     });
   }
 

@@ -4,6 +4,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { ManageUsersComponent } from './components/manage-users/manage-users.component';
+import { AddUserDialogComponent } from './components/add-user-dialog/add-user-dialog.component';
+import { FirestoreDatePipe } from './shared/pipes/firestore-date.pipe';
 
 // Firebase imports
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -12,7 +14,7 @@ import { environment } from '../environments/environment';
 import { MaterialModule } from './shared/modules/material/material-module';
 
 @NgModule({
-  declarations: [App, ManageUsersComponent],
+  declarations: [App, ManageUsersComponent, AddUserDialogComponent, FirestoreDatePipe],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
