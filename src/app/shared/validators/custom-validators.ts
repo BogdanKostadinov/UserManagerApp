@@ -18,9 +18,13 @@ export function duplicateNameValidator(
     if (!control.value) return of(null);
     const value = control.value.trim().toLowerCase();
     const names = getNamesFn();
+    if (!names || !Array.isArray(names)) {
+      return of(null);
+    }
     if (excludeName && value === excludeName.trim().toLowerCase()) {
       return of(null);
     }
+
     const exists = names.includes(value);
     return of(exists ? { duplicateName: true } : null);
   };
