@@ -1,153 +1,131 @@
 .manage-users-container {
   padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
+  padding-top: 120px; // Add space for sticky header
 }
 
-.header-section {
+// Header Section
+.header-toolbar {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-dark)) !important;
+  color: white !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1) !important;
+  min-height: 80px !important;
+}
+
+.sticky-header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+}
+
+.header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  width: 100%;
+  padding: 16px 24px;
+  gap: 24px;
   flex-wrap: wrap;
-  gap: 16px;
 }
 
-.page-title {
-  margin: 0;
-  color: #333;
-  font-weight: 500;
+.header-text {
+  .page-title {
+    margin: 0 0 4px 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+  }
+  
+  .page-subtitle {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-weight: 400;
+  }
 }
 
 .add-user-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.filter-section {
-  margin-bottom: 24px;
-}
-
-.search-field {
-  width: 100%;
-  max-width: 400px;
-}
-
-.table-container {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.users-table {
-  width: 100%;
-
-  .mat-column-name {
-    flex: 2;
-    min-width: 200px;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  height: auto !important;
+  font-weight: 600 !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
   }
-
-  .mat-column-role {
-    flex: 1;
-    min-width: 120px;
-  }
-
-  .mat-column-isActive {
-    flex: 1;
-    min-width: 120px;
-  }
-
-  .mat-column-createdAt {
-    flex: 1.5;
-    min-width: 150px;
-  }
-
-  .mat-column-updatedAt {
-    flex: 1.5;
-    min-width: 150px;
-  }
-
-  .mat-column-actions {
-    flex: 1;
-    min-width: 150px;
+  
+  mat-icon {
+    margin-right: 8px;
   }
 }
 
-.user-name {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  .user-avatar {
-    color: #666;
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
-  }
-
-  span {
-    font-weight: 500;
-  }
-}
-
-.action-buttons {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.no-data {
-  text-align: center;
-  padding: 48px 24px !important;
-
-  .no-data-message {
-    display: flex;
+// Responsive Design
+@media (max-width: 1024px) {
+  .header-content {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    text-align: center;
     gap: 16px;
-    color: #666;
-
-    mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      opacity: 0.5;
-    }
-
-    h3 {
-      margin: 0;
-      font-weight: 500;
-    }
-
-    p {
-      margin: 0;
-      opacity: 0.7;
+    
+    .add-user-btn {
+      align-self: center;
     }
   }
 }
 
-// Responsive design
 @media (max-width: 768px) {
   .manage-users-container {
     padding: 16px;
+    padding-top: 100px; // Adjust for smaller header
   }
-
-  .header-section {
-    flex-direction: column;
-    align-items: stretch;
-
-    .add-user-btn {
-      align-self: flex-start;
-    }
+  
+  .header-toolbar {
+    min-height: 70px !important;
   }
+  
+  .header-text .page-title {
+    font-size: 24px;
+  }
+  
+  .header-text .page-subtitle {
+    font-size: 13px;
+  }
+}
 
-  .users-table {
-    .mat-column-createdAt,
-    .mat-column-updatedAt {
-      display: none;
-    }
+@media (max-width: 480px) {
+  .manage-users-container {
+    padding: 12px;
+    padding-top: 80px; // Adjust for smallest header
+  }
+  
+  .header-toolbar {
+    min-height: 60px !important;
+  }
+  
+  .header-content {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  
+  .header-text .page-title {
+    font-size: 20px;
+  }
+  
+  .add-user-btn {
+    padding: 10px 20px !important;
+    font-size: 14px !important;
   }
 }
 

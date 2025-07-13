@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { User } from '../../models/user.model';
+import { User, UserRole } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { duplicateNameValidator } from '../../shared/validators/custom-validators';
 
@@ -13,7 +13,7 @@ import { duplicateNameValidator } from '../../shared/validators/custom-validator
 })
 export class AddUserDialogComponent implements OnInit {
   userForm: FormGroup;
-  roles = ['Admin', 'Moderator', 'User'];
+  roles = Object.values(UserRole);
   allNames: string[] = [];
 
   constructor(

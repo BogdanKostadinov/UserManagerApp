@@ -1,0 +1,44 @@
+.filter-section {
+  margin-bottom: 24px;
+  padding: 24px;
+  border-radius: 20px;
+}
+
+.filter-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: center;
+}
+
+.search-field {
+  flex: 1;
+  min-width: 300px;
+  
+  .mat-mdc-form-field-outline {
+    border-radius: 12px !important;
+  }
+  
+  .search-icon {
+    color: var(--primary-color);
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .filter-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-field {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-section {
+    margin-bottom: 16px;
+    padding: 16px;
+  }
+}

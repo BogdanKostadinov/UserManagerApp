@@ -1,0 +1,14 @@
+<!-- Filter Section -->
+<div class="filter-section card-elevated">
+  <div class="filter-content">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search users</mat-label>
+      <input
+        matInput
+        (keyup)="onSearchInput($event)"
+        placeholder="Search by name or role"
+      />
+      <mat-icon matPrefix class="search-icon">search</mat-icon>
+    </mat-form-field>
+  </div>
+</div>

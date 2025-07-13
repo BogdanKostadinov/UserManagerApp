@@ -1,7 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '../../models/user.model';
@@ -27,8 +25,10 @@ export class ManageUsersComponent implements OnInit {
   dataSource = new MatTableDataSource<User>();
   loading = false;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  // Stats properties
+  totalUsers = 0;
+  activeUsers = 0;
+  inactiveUsers = 0;
 
   constructor(
     private userService: UserService,
@@ -40,11 +40,6 @@ export class ManageUsersComponent implements OnInit {
     this.loadUsers();
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   /**
    * Load all users from the service
    */
@@ -53,6 +48,7 @@ export class ManageUsersComponent implements OnInit {
     this.userService.getUsers().subscribe({
       next: (users) => {
         this.dataSource.data = users;
+        this.updateStats(users);
         this.loading = false;
       },
       error: (error) => {
@@ -64,15 +60,20 @@ export class ManageUsersComponent implements OnInit {
   }
 
   /**
+   * Update statistics based on users data
+   */
+  private updateStats(users: User[]): void {
+    this.totalUsers = users.length;
+    this.activeUsers = users.filter(user => user.isActive).length;
+    this.inactiveUsers = users.filter(user => !user.isActive).length;
+  }
+
+  /**
    * Apply filter to the table
    */
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
   /**
@@ -181,6 +182,16 @@ export class ManageUsersComponent implements OnInit {
           },
         });
       }
+    });
+  }
+
+  /**
+   * Export users data
+   */
+  exportUsers(): void {
+    // TODO: Implement export functionality
+    this.snackBar.open('Export functionality coming soon!', 'Close', {
+      duration: 3000,
     });
   }
 

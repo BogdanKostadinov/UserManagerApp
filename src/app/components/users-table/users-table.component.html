@@ -1,0 +1,177 @@
+<div class="table-container card-elevated">
+  <div class="table-wrapper">
+    <table mat-table [dataSource]="dataSource" matSort class="users-table">
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <div class="header-cell">
+            <mat-icon>person</mat-icon>
+            <span>Name</span>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <div class="user-name">
+            <div class="user-avatar">
+              <mat-icon>account_circle</mat-icon>
+            </div>
+            <div class="user-info">
+              <span class="user-name-text">{{ user.name }}</span>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Role Column -->
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <div class="header-cell">
+            <mat-icon>badge</mat-icon>
+            <span>Role</span>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <mat-chip [class]="'role-chip role-' + user.role.toLowerCase()">
+            <mat-icon>{{ getRoleIcon(user.role) }}</mat-icon>
+            {{ user.role }}
+          </mat-chip>
+        </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="isActive">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <div class="header-cell">
+            <mat-icon>toggle_on</mat-icon>
+            <span>Status</span>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <div
+            class="status-badge"
+            [class.active]="user.isActive"
+            [class.inactive]="!user.isActive"
+          >
+            <div class="status-indicator"></div>
+            <span>{{ user.isActive ? "Active" : "Inactive" }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Created Date Column -->
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <div class="header-cell">
+            <mat-icon>schedule</mat-icon>
+            <span>Created</span>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <div class="date-cell">
+            {{ user.createdAt | firestoreDate: "short" }}
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Updated Date Column -->
+      <ng-container matColumnDef="updatedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <div class="header-cell">
+            <mat-icon>update</mat-icon>
+            <span>Last Updated</span>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <div class="date-cell">
+            {{ user.updatedAt | firestoreDate: "short" }}
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="header-cell">
+            <mat-icon>settings</mat-icon>
+            <span>Actions</span>
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          <div class="action-menu">
+            <button
+              mat-icon-button
+              [matMenuTriggerFor]="actionMenu"
+              class="action-trigger"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            
+            <mat-menu #actionMenu="matMenu" class="user-actions-menu">
+              <button mat-menu-item (click)="onEditUser(user)">
+                <mat-icon>edit</mat-icon>
+                <span>Edit User</span>
+              </button>
+              
+              <button mat-menu-item (click)="onToggleUserStatus(user)">
+                <mat-icon>{{ user.isActive ? "block" : "check_circle" }}</mat-icon>
+                <span>{{ user.isActive ? "Deactivate" : "Activate" }}</span>
+              </button>
+              
+              <mat-divider></mat-divider>
+              
+              <button mat-menu-item (click)="onDeleteUser(user)" class="delete-action">
+                <mat-icon>delete</mat-icon>
+                <span>Delete User</span>
+              </button>
+            </mat-menu>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Table Header and Rows -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="table-row"
+      ></tr>
+
+      <!-- No Data Row -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
+          <div class="no-data-message">
+            <div class="no-data-illustration">
+              <mat-icon>people_outline</mat-icon>
+            </div>
+            <h3>No users found</h3>
+            <p>
+              {{
+                dataSource.filter
+                  ? "No users match your search criteria. Try adjusting your filters."
+                  : "Get started by adding your first user to the system."
+              }}
+            </p>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="onAddUser()"
+              *ngIf="!dataSource.filter"
+            >
+              <mat-icon>add</mat-icon>
+              Add First User
+            </button>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Paginator -->
+  <div class="table-footer">
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20, 50]"
+      showFirstLastButtons
+      aria-label="Select page of users"
+    >
+    </mat-paginator>
+  </div>
+</div>

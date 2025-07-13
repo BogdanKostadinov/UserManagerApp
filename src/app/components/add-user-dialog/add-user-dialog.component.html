@@ -1,45 +1,80 @@
-<h2 mat-dialog-title>Add New User</h2>
+<div class="dialog-container">
+  <div class="dialog-header">
+    <div class="header-content">
+      <mat-icon class="header-icon">person_add</mat-icon>
+      <h2 mat-dialog-title class="dialog-title">Add New User</h2>
+    </div>
+    <button mat-icon-button (click)="onCancel()" class="close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
 
-<mat-dialog-content>
-  <form [formGroup]="userForm" class="user-form">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="name" placeholder="Enter user name" />
-      <mat-error
-        *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched"
-      >
-        {{ getErrorMessage("name") }}
-      </mat-error>
-    </mat-form-field>
+  <mat-dialog-content class="dialog-content">
+    <form [formGroup]="userForm" class="user-form">
+      <div class="form-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input 
+            matInput 
+            formControlName="name" 
+            placeholder="Enter a username"
+            autocomplete="name"
+          />
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">
+            {{ getErrorMessage("name") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Role</mat-label>
-      <mat-select formControlName="role">
-        <mat-option *ngFor="let role of roles" [value]="role">
-          {{ role }}
-        </mat-option>
-      </mat-select>
-      <mat-error
-        *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched"
-      >
-        {{ getErrorMessage("role") }}
-      </mat-error>
-    </mat-form-field>
+      <div class="form-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="role">
+            <mat-option *ngFor="let role of roles" [value]="role">
+              <div class="role-option">
+                <span>{{ role }}</span>
+              </div>
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix>badge</mat-icon>
+          <mat-error *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched">
+            {{ getErrorMessage("role") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-    <mat-slide-toggle formControlName="isActive" color="primary">
-      Active User
-    </mat-slide-toggle>
-  </form>
-</mat-dialog-content>
+      <div class="form-group">
+        <div class="toggle-container">
+          <div class="toggle-info">
+            <mat-icon class="toggle-icon">toggle_on</mat-icon>
+            <div class="toggle-text">
+              <h4>User Status</h4>
+              <p>Enable this user account immediately</p>
+            </div>
+          </div>
+          <mat-slide-toggle formControlName="isActive" color="primary" class="status-toggle">
+            Active User
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
 
-<mat-dialog-actions [align]="'end'">
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="onSubmit()"
-    [disabled]="!userForm.valid"
-  >
-    Add User
-  </button>
-</mat-dialog-actions>
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-button (click)="onCancel()" class="cancel-btn">
+      <mat-icon>cancel</mat-icon>
+      Cancel
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onSubmit()"
+      [disabled]="!userForm.valid"
+      class="submit-btn"
+    >
+      <mat-icon>add</mat-icon>
+      Add User
+    </button>
+  </mat-dialog-actions>
+</div>
